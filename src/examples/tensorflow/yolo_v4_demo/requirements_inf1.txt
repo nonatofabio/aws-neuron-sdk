@@ -1,0 +1,8 @@
+neuron-cc 
+tensorflow-neuron 
+requests 
+pillow 
+matplotlib 
+pycocotools 
+torch
+
