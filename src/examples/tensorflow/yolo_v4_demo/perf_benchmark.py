@@ -14,6 +14,8 @@ parser.add_argument('--timed',
                     help='Total Benchmar Time - Bounds the execution to a time window. cycles through the same images if benchmark time larger than required to complete the epoch',
                     type=int,
                    default=None)
+parser.add_argument('--no-thread', dest='thread', action='store_false',
+                    help='Run benchmark without ThreadPoolExecutor')
 args = parser.parse_args()
 
 yolo_pred = tf.contrib.predictor.from_saved_model(args.path)
@@ -36,8 +38,11 @@ with open(val_annotate, 'r', encoding='utf-8') as f2:
         dataset = json.loads(line)
         images = dataset['images']
 
-if args.timed:
+if args.timed and args.thread:
     print('Executing timed benchmark for {} seconds'.format(args.timed))
     box_ap = timed_evaluate(yolo_pred, images, val_coco_root, val_annotate, eval_batch_size, clsid2catid, args.timed)
+elif args.timed and not args.thread:
+    print('Executing timed non threaded benchmark for {} seconds'.format(args.timed))
+    box_ap = timed_predict(yolo_pred, images, val_coco_root, val_annotate, eval_batch_size, clsid2catid, args.timed)
 else:
     box_ap = evaluate(yolo_pred, images, val_coco_root, val_annotate, eval_batch_size, clsid2catid)
