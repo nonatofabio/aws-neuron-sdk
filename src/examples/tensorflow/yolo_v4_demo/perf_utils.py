@@ -155,6 +155,7 @@ def timed_evaluate(yolo_predictor, images, eval_pre_path, anno_file, eval_batch_
         while time.time() - start_time < bench_time:
             fut_im_list = []
             fut_list = []
+            fut = []
             for batch_im_id, batch_im_name, batch_img_bytes in zip(batch_im_id_list, batch_im_name_list, batch_img_bytes_list):
                 if len(batch_img_bytes) != eval_batch_size:
                     continue
