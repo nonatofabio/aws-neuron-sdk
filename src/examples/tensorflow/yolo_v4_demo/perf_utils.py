@@ -152,13 +152,13 @@ def timed_evaluate(yolo_predictor, images, eval_pre_path, anno_file, eval_batch_
 
     # warm up
     yolo_predictor({'image': np.array(batch_img_bytes_list[0], dtype=object)})
+    start_time = time.time()
+    batch_time = start_time
+    count = 0
+    while time.time() - start_time < bench_time:
 
-    with futures.ThreadPoolExecutor(4) as exe:
-        count = 0
-        start_time = time.time()
-        batch_time = start_time
+        with futures.ThreadPoolExecutor(4) as exe:
 
-        while time.time() - start_time < bench_time:
             fut_im_list = []
             fut_list = []
             fut = []
@@ -181,9 +181,9 @@ def timed_evaluate(yolo_predictor, images, eval_pre_path, anno_file, eval_batch_
                 if time.time() - start_time > bench_time:
                     break
 
-        print('==================== Performance Measurement ====================')
-        print('Finished inference on {} images in {:.3} seconds'.format(count, time.time() - start_time))
-        print('=================================================================')
+    print('==================== Performance Measurement ====================')
+    print('Finished inference on {} images in {:.3} seconds'.format(count, time.time() - start_time))
+    print('=================================================================')        
 
     # start evaluation
     box_ap_stats = bbox_eval(anno_file, bbox_list)

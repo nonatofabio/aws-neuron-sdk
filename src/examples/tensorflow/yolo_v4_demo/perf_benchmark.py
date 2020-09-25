@@ -16,6 +16,8 @@ parser.add_argument('--timed',
                    default=None)
 parser.add_argument('--no-thread', dest='thread', action='store_false',
                     help='Run benchmark without ThreadPoolExecutor')
+parser.add_argument('--eval_bs', type=int, default=8,
+                    help='Run benchmark without ThreadPoolExecutor')
 args = parser.parse_args()
 
 yolo_pred = tf.contrib.predictor.from_saved_model(args.path)
@@ -30,7 +32,7 @@ clsid2catid = {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 
                63: 73, 64: 74, 65: 75, 66: 76, 67: 77, 68: 78, 69: 79, 70: 80, 71: 81, 72: 82, 73: 84, 74: 85,
                75: 86, 76: 87, 77: 88, 78: 89, 79: 90}
 
-eval_batch_size = 8
+eval_batch_size = args.eval_bs
 
 with open(val_annotate, 'r', encoding='utf-8') as f2:
     for line in f2:
