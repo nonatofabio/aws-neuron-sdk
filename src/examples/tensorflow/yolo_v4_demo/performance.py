@@ -63,7 +63,7 @@ def current_performance():
         if latency_list:
             p50 = np.percentile(latency_list[-args.latency_window_size:], 50)
             p90 = np.percentile(latency_list[-args.latency_window_size:], 90)
-        print('pid {}: current throughput {}, latency p50={:.3f} p90={:.3f}'.format(os.getpid(), throughput, p50, p90))
+        print('pid {}: current infers {} throughput {}, latency p50={:.3f} p90={:.3f}'.format(os.getpid(), current_num_infer,throughput, p50, p90))
         last_num_infer = current_num_infer
         time.sleep(args.throughput_interval)
     global live
